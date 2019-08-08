@@ -118,7 +118,11 @@ func (inliner *Inliner) parseHTML() error {
 func (inliner *Inliner) parseStylesheets() error {
 	var result error
 
-	inliner.doc.Find("style").EachWithBreak(func(i int, s *goquery.Selection) bool {
+	inliner.doc.
+		Find("style").
+		Not("[bypass-inline=\"true\"]").
+		EachWithBreak(func(i int, s *goquery.Selection) bool {
+
 		stylesheet, err := parser.Parse(s.Text())
 		if err != nil {
 			result = err
